@@ -1,4 +1,6 @@
 class Solution:
+    # https://leetcode.com/problems/isomorphic-strings/
+    
     def isIsomorphic(self, s: str, t: str) -> bool:
         """
             first impression: i'th character must have the same number of reps on each sentence
