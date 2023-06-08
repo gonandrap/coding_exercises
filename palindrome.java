@@ -1,6 +1,6 @@
 // https://leetcode.com/problems/palindrome-number/description/
 
-class Solution {
+class SolutionPalindrome {
     public boolean isPalindrome(int x) {
         String number = String.valueOf(x);
         int i = 0;
@@ -13,5 +13,11 @@ class Solution {
             j -= 1;
         }
         return true;
+    }
+
+    public static void main(String[] args) {
+        int n = 1221;
+        SolutionPalindrome s = new SolutionPalindrome();
+        System.out.println("is palindrome : " + s.isPalindrome(n));
     }
 }
