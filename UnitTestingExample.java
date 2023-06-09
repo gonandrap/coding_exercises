@@ -30,4 +30,9 @@ public class UnitTestingExample {
         UnitTestingExample obj = new UnitTestingExample();
         obj.excp_trigger();
     }
+
+    @Test
+    public void test_max() {
+        assertEquals(Math.max(2,4), 4);
+    }
 }
