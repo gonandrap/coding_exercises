@@ -22,6 +22,7 @@ import java.util.Set;
 
 public class course_schedule {
     private List<Integer> deps;
+    private Map<Integer, List<Integer>> dependencies;
     
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         /*
@@ -49,9 +50,12 @@ public class course_schedule {
                 - I was doing something WRONG : I was considering paths validated with nodes that I was accumulating (starting from the current rootNode)
                     - It should be the other way around : I can only claim a path validated if I go all the way down (no more deps) and get back to the current
                       level of the graph
+            NEW REVELATION!
+                - this is a problem of determining the graph is DAG (Directed Acyclic Graph), for which there are known algoritms to solve it (Kahn and DFS)
+                    My initial implementation was very close to the DFS one though.
         */
 
-        Map<Integer, List<Integer>> dependencies = new HashMap<Integer, List<Integer>>();       // just to make easier the dependency iteration
+        dependencies = new HashMap<Integer, List<Integer>>();       // just to make easier the dependency iteration
         for(int [] dependency : prerequisites) {
             deps = dependencies.getOrDefault(dependency[0], new ArrayList<Integer>());
             deps.add(dependency[1]);
@@ -59,84 +63,41 @@ public class course_schedule {
             dependencies.putIfAbsent(dependency[1], new ArrayList<Integer>());      // want to make sure that each course is fully listed (even when doesnt have deps)
         }
         
-        Set<Integer> subgraphsValidated = new HashSet<Integer>();
-        Set<Integer> pathsValidated = new HashSet<Integer>();
+        Set<Integer> subgraphsValidated = new HashSet<Integer>();       // equals 'permanent mark' on DFS algorithm of topological order
+        Set<Integer> elemsInValidation = new HashSet<>();
 
-        int i = 0;
         for (int[] prereq : prerequisites) {
-            Integer pathRoot = prereq[0];            // we are validating the entire path, including the root
-            System.out.println("current prerequisite being evaluated = " + Arrays.toString(prerequisites[i]));
-            if (pathsValidated.contains(pathRoot)) {
-                // this path doesnt have a cycle
-                continue;
-            } else {
-                Set<Integer> elemsInValidation = new HashSet<>();
-                Stack<Integer> subGrapthInIteration = new Stack<>();
-                subGrapthInIteration.push(pathRoot);
-
-                while (subGrapthInIteration.empty() == false) {    // is there any elem to verify?
-                    Integer toVerify = subGrapthInIteration.pop();
-                    System.out.println("toVerify:" + toVerify);
-                    List<Integer> deps = dependencies.getOrDefault(toVerify, new ArrayList<Integer>());
-                    if (deps.isEmpty()) {
-                        // one branch of the subgraph was validated! not yet the entire subgraph
-                        pathsValidated.add(toVerify);        // since "toVerify" doesnt have deps, then its validated
-                        System.out.println("pathsValidated:" + pathsValidated.toString());
-                        subgraphsValidated.add(toVerify);
-
-                        elemsInValidation.clear();      // branch validated, can be removed
-                    } else if (isAnyDepInValidation(deps, elemsInValidation, pathsValidated, subgraphsValidated)) {
-                        return false;
-                    } else if (allDepsValidated(deps, pathsValidated)) {
-                            pathsValidated.add(toVerify);       // all path from this node are validated
-                            subgraphsValidated.add(toVerify);
-                            System.out.println("subgraph with root [" + toVerify + "] validated");          
-                    } else {
-                        elemsInValidation.add(toVerify);
-                        addDependenciesToVerify(deps, subGrapthInIteration, pathsValidated, subgraphsValidated);        // I dont need to add the deps that are in pathsValidated, otherwise I'll be repeating
-                    }
+            Integer node = prereq[0];            // we are validating the entire path, including the root
+            System.out.println("current node being evaluated = " + node);
+                if (visit(node, elemsInValidation, subgraphsValidated) == false) {
+                    // found a cycle!
+                    return false;
                 }
-                // All paths from 'pathRoot' has been cleared, need to flag them as such
-                subgraphsValidated.addAll(elemsInValidation);
-
-                i += 1;
             }
-        }
 
         // If we reached the end of the prereq and didnt fail any validation, then we are ok
         return true;
     }
 
-    public boolean allDepsValidated(List<Integer> deps, Set<Integer> pathsValidated) {
-        for(Integer dependency : deps) {
-            if (pathsValidated.contains(dependency) == false) {
-                return false;
-            }
+    public boolean visit(Integer node, Set<Integer> elemsInValidation, Set<Integer> subgraphsValidated) {
+        if (subgraphsValidated.contains(node)) {
+            return true;
         }
-        return true;
-    }
+        else if (elemsInValidation.contains(node)) {
+            return false;
+        } else {
+            elemsInValidation.add(node);            // temporary mark to 'node'
 
-    public boolean isAnyDepInValidation(List<Integer> deps, Set<Integer> elemsInValidation, Set<Integer> pathsValidated, Set<Integer> subgraphsValidated) {
-        /*
-         * return true if any dependency is in a branch being validated but not yet partially validated (reached leaf node)
-         */
-        for(Integer dependency : deps) {
-            if (elemsInValidation.contains(dependency) && pathsValidated.contains(dependency) == false && subgraphsValidated.contains(dependency) == false) {
-                return true;
+            List<Integer> deps = dependencies.get(node);
+            for (Integer dependency : deps) {
+                if (visit(dependency, elemsInValidation, subgraphsValidated) == false) {
+                    return false;       // any cycle found down the road, fails the entire graph
+                }
             }
-        }
-        return false;
-    }
 
-    public void addDependenciesToVerify(List<Integer> deps, Stack<Integer> subGrapthInIteration, Set<Integer> pathsValidated, Set<Integer> subgraphsValidated) {
-        /*
-         * Only adds those dependencies (node in the same subgraph) that were not verified in a previous branch of the same subgraph
-         */
-        for(Integer dependency : deps) {
-            if (!pathsValidated.contains(dependency) && !subgraphsValidated.contains(dependency)) {
-                System.out.println("adding dep to iterate:" + dependency);
-                subGrapthInIteration.push(dependency);
-            }
+            elemsInValidation.remove(node);         // remove temporary mark
+            subgraphsValidated.add(node);           // add permanent mark
+            return true;
         }
     }
 
