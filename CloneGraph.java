@@ -1,8 +1,8 @@
-import java.util.Queue;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 
 // https://leetcode.com/problems/clone-graph/
 
@@ -74,8 +74,8 @@ public class CloneGraph {
    }
 
     public static void main(String[] args) {
-        CloneGraph cg;
+        CloneGraph cg = new CloneGraph();
         int [][] graphList;
-        Node node = new cg.createGraph(graphList);
+        // TODO : need to convert from int[][] to Node
     }
 }

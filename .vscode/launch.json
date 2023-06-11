@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CloneGraph",
+            "request": "launch",
+            "mainClass": "CloneGraph",
+            "projectName": "coding_exercises_6428f261"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
