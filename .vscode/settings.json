@@ -1,4 +1,8 @@
 {
     "java.debug.settings.onBuildFailureProceed": true,
-    "java.dependency.packagePresentation": "hierarchical"
+    "java.dependency.packagePresentation": "hierarchical",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\gonza\\workspace\\java libraries\\javafx-sdk-20.0.1\\lib\\javafx.base.jar"
+    ]
 }

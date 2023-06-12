@@ -1,6 +1,6 @@
 
 
-class Solution {
+class SolutionSign {
     public int arraySign(int[] nums) {
         /*
             multiplying all numbers could lead to an overflow, which will change the sign

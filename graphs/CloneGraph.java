@@ -1,3 +1,4 @@
+package graphs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -74,8 +75,8 @@ public class CloneGraph {
    }
 
     public static void main(String[] args) {
-        CloneGraph cg = new CloneGraph();
-        int [][] graphList;
+        //CloneGraph cg = new CloneGraph();
+        //int [][] graphList;
         // TODO : need to convert from int[][] to Node
     }
 }

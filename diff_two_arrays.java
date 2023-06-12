@@ -4,7 +4,7 @@ import java.util.List;
 
 // https://leetcode.com/problems/find-the-difference-of-two-arrays/description/
 
-class Solution {
+class SolutionDiffTwoArrays {
     public List<List<Integer>> findDifference(int[] nums1, int[] nums2) {
         Arrays.sort(nums1);
         Arrays.sort(nums2);

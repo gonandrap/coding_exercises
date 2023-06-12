@@ -3,7 +3,7 @@ import java.util.Collections;
 
 // https://leetcode.com/problems/last-stone-weight/description/
 
-class Solution {
+class SolutionLastStoneWeight {
     public int lastStoneWeight(int[] stones) {
         /*
             Comments

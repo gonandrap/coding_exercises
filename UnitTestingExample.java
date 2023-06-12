@@ -3,7 +3,6 @@ import static org.junit.Assert.assertEquals;
 
 
 import org.junit.*;
-import org.junit.runner.*;
 
 
 public class UnitTestingExample {
