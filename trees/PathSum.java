@@ -41,14 +41,12 @@ class PathSum {
         initialNodes.add(root);
 
         List<Integer> nodesPerPath = new ArrayList<Integer>();        // nodes of the firt branch (only the root)
-        //nodesPerPath.add(root.val);
 
         Pair<Pair<Integer, List<Integer>>, List<TreeNode>> rootNodeLevel = new Pair<>(new Pair<>(0, nodesPerPath), initialNodes);
         Queue<Pair<Pair<Integer, List<Integer>>, List<TreeNode>>> nodesPerLevel = new LinkedList<Pair<Pair<Integer, List<Integer>>, List<TreeNode>>>();     // main collection to iterate the tree in BFS
         
         nodesPerLevel.add(rootNodeLevel);                               // ready to start iterating per level
 
-        System.out.println("About to start");
         while (nodesPerLevel.isEmpty() == false) {
             Pair<Pair<Integer, List<Integer>>, List<TreeNode>> currentIteration = nodesPerLevel.remove();
             /*
@@ -57,18 +55,16 @@ class PathSum {
                     - getValue() : all nodes values of the path, which is accumulated to be returned if applies
                 - currentIteration.getValue() : list of nodes in the current level being iterated
             */
-            System.out.println("About to start iterating nodes of the level");
             for (TreeNode currentTreeNode : currentIteration.getValue()) {
                 Pair<Integer, List<Integer>> currentPath = currentIteration.getKey();
                 List<TreeNode> currentNodeChilds = getChilds(currentTreeNode);
 
-                System.out.println(String.format("Current path sum=[%d] and node val being evaluated=[%d]", currentPath.getKey(), currentTreeNode.val));
-
                 if (currentNodeChilds.isEmpty()) {
                     if (currentPath.getKey() + currentTreeNode.val == targetSum) {
                         // keep path nodes as part of the result, which Im not accumulating!
-                        currentPath.getValue().add(currentTreeNode.val);
-                        result.add(currentPath.getValue());
+                        List<Integer> toAdd = new ArrayList<>(currentPath.getValue());      // need to make a copy to not change the one common to all childs
+                        toAdd.add(currentTreeNode.val);
+                        result.add(toAdd);
                     }
                 } else {
                     // is not a leaf, keep iterating down the  tree
