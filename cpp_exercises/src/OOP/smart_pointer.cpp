@@ -15,13 +15,35 @@ class MySmartPointer
             std::cout << "creating an [actualPointer] instance" << std::endl;
         }
 
-        MySmartPointer(MySmartPointer & instance)
+        MySmartPointer(MySmartPointer & instance) : actualPointer(instance.actualPointer)
         {
             counter++;
             std::cout << "creating a [MySmartPointer] copy, references=" << counter << std::endl;
         }
 
         ~MySmartPointer()
+        {
+            remove();
+        }
+
+        T* operator->() { return actualPointer; }
+
+        MySmartPointer & operator=(MySmartPointer & instance)
+        {
+            if (counter>0)
+            {
+                // this is the case where the object was already counting, so lets remove that one before
+                // assigning the new one
+                remove();
+            }
+
+            actualPointer = instance.actualPointer;
+            counter++;
+            std::cout << "[MySmartPointer] assign operator, references=" << counter << std::endl;
+        }
+
+    private:
+        void remove()
         {
             counter--;
             if (counter == 0)
@@ -32,14 +54,6 @@ class MySmartPointer
             {
                 std::cout << "counter=[" << counter << "], not yet deleting actual pointer" << std::endl;
             }
-        }
-
-        T* operator->() { return actualPointer; }
-
-        MySmartPointer & operator=(MySmartPointer & instance)
-        {
-            counter++;
-            std::cout << "[MySmartPointer] assign operator, references=" << counter << std::endl;
         }
 
 };
