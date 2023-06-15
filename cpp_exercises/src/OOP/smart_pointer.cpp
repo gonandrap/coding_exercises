@@ -36,6 +36,12 @@ class MySmartPointer
 
         T* operator->() { return actualPointer; }
 
+        MySmartPointer & operator=(MySmartPointer & instance)
+        {
+            counter++;
+            std::cout << "[MySmartPointer] assign operator, references=" << counter << std::endl;
+        }
+
 };
 
 class House
@@ -84,8 +90,9 @@ int MySmartPointer<T>::counter = 0;
 int main(int argc, char* argv[])
 {
     MySmartPointer<House> smart_ptr(new House());
-    MySmartPointer<House> smart_ptr_2 = smart_ptr;
-    MySmartPointer<House> smart_ptr_3 = smart_ptr;
+    MySmartPointer<House> smart_ptr_2(smart_ptr);
+    MySmartPointer<House> * smart_ptr_3;
+    *smart_ptr_3 = smart_ptr;
 
     return 0;
 }
