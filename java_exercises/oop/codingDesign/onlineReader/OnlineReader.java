@@ -7,10 +7,14 @@ public class OnlineReader {
 
     Map<String, Document> opened;               // documents uploaded
     Map<String, Integer> reading;               // documents being read
+    Renderer renderer;
+    Annotator annotator;
 
     public OnlineReader() {
         opened = new HashMap<String,Document>();
         reading = new HashMap<String,Integer>();
+        renderer = new Renderer();
+        annotator = new Annotator();
     }
 
     /*
@@ -34,7 +38,9 @@ public class OnlineReader {
         if (checkUserPermissions(user, document)) {
             System.out.println(String.format("User {%s} is starting to read document {%s}", user.getName(), document.getName()));
             reading.put(documentName, 0);
-            return document.getPage(0);
+            String page = document.getPage(0);
+            renderer.displayContent(user.getName(), page);
+            return page;
         } else {
             return null;
         }
@@ -48,7 +54,9 @@ public class OnlineReader {
                 int nextPage = ++currentPage;
                 System.out.println(String.format("User {%s} is moving to the next page [%d] of the document {%s}", user.getName(), nextPage, documentName));
                 reading.put(documentName, nextPage);
-                return document.getPage(nextPage);
+                String newPage = document.getPage(nextPage);
+                renderer.displayContent(user.getName(), newPage);
+                return newPage;
             } else {
                 System.out.println(String.format("User {%s} has finished the entire book {%s}", user.getName(), documentName));
                 return null;
@@ -56,6 +64,19 @@ public class OnlineReader {
             
         } else {
             return null;
+        }
+    }
+
+    public Annotator getAnnotator() {
+        return annotator;
+    }
+
+    public int currentPage(String bookName) {
+        if (reading.containsKey(bookName)) {
+            return reading.get(bookName);
+        } else {
+            System.out.println(String.format("BookName %s is not actually being read", bookName));
+            return -1;
         }
     }
 
@@ -114,13 +135,23 @@ public class OnlineReader {
         System.out.println(String.format("User {%s} tries to read {%s} = {%b}", user2.getName(), bookName1, content2 != null));
         System.out.println(String.format("User {%s} tries to read {%s} = {%b}", user1.getName(), bookName1, content3 != null));
 
+        Annotator annotationSystem = reader.getAnnotator();
+
+        String pageContent = "";
         reader.nextPage(user1, bookName3);
         reader.nextPage(user2, bookName1);
+        pageContent = reader.nextPage(user1, bookName1);
+        annotationSystem.createNote(bookName1, reader.currentPage(bookName1), String.format("Creating a note for user %s", user1.getName()));
+        annotationSystem.highlight(bookName1, reader.currentPage(bookName1), pageContent.substring(5, pageContent.length()));
         reader.nextPage(user1, bookName1);
-        reader.nextPage(user1, bookName1);
-        reader.nextPage(user1, bookName1);
+        pageContent = reader.nextPage(user1, bookName1);
+        annotationSystem.highlight(bookName1, reader.currentPage(bookName1), pageContent.substring(5, pageContent.length()));
 
         reader.readingStatus();
+
+        annotationSystem.displayAnnotations(bookName1);
+        annotationSystem.displayAnnotations(bookName2);
+        annotationSystem.displayAnnotations(bookName3);
     }
 
 
@@ -130,7 +161,7 @@ public class OnlineReader {
 
         Map<Integer, String> book = new HashMap<Integer, String>();
         for(int i = 0; i < numberPages; ++i) {
-            book.put(i, String.format("{} - page{}", i, bookName));
+            book.put(i, String.format("[%s] - page %d", bookName, i));
         }
         return book;
     }
