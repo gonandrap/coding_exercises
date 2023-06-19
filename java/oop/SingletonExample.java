@@ -1,3 +1,4 @@
+package java.oop;
 
 public class SingletonExample {
     private static SingletonExample _instance;

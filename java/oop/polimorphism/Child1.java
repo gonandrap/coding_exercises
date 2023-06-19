@@ -1,4 +1,4 @@
-package polimorphism;
+package java.oop.polimorphism;
 
 public class Child1 extends BaseClass {
     @Override

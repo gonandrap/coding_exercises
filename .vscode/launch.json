@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Bipartition",
+            "request": "launch",
+            "mainClass": "trees.Bipartition",
+            "projectName": "coding_exercises_6428f261"
+        },
+        {
+            "type": "java",
             "name": "PathSum",
             "request": "launch",
             "mainClass": "trees.PathSum",
