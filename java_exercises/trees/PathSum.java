@@ -1,4 +1,4 @@
-package java.trees;
+package java_exercises.trees;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

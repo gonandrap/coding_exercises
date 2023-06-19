@@ -1,4 +1,4 @@
-package java.trees;
+package java_exercises.trees;
 
 public class TreeNode {
     int val;

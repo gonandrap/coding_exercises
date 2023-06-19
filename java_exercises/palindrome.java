@@ -1,4 +1,4 @@
-package java;
+package java_exercises;
 // https://leetcode.com/problems/palindrome-number/description/
 
 class SolutionPalindrome {

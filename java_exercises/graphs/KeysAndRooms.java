@@ -1,4 +1,4 @@
-package java.graphs;
+package java_exercises.graphs;
 // https://leetcode.com/problems/keys-and-rooms/submissions/
 
 import java.util.HashSet;

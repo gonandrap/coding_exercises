@@ -1,4 +1,4 @@
-package java.graphs;
+package java_exercises.graphs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;

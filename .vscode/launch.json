@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "OnlineReader",
+            "request": "launch",
+            "mainClass": "java_exercises.oop.codingDesign.onlineReader.OnlineReader",
+            "projectName": "coding_exercises_6428f261"
+        },
+        {
+            "type": "java",
+            "name": "OnlineReader",
+            "request": "launch",
+            "mainClass": "java.oop.codingDesign.onlineReader.OnlineReader",
+            "projectName": "coding_exercises_6428f261"
+        },
+        {
+            "type": "java",
             "name": "Bipartition",
             "request": "launch",
             "mainClass": "trees.Bipartition",

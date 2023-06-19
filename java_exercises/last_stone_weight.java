@@ -1,4 +1,4 @@
-package java;
+package java_exercises;
 import java.util.PriorityQueue;
 import java.util.Collections;
 

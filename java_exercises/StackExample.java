@@ -1,4 +1,4 @@
-package java.oop;
+package java_exercises;
 import java.util.Stack;
 
 public class StackExample {

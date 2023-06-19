@@ -1,4 +1,4 @@
-package java;
+package java_exercises;
 // https://leetcode.com/problems/two-sum/description/
 
 class Solution1 {

@@ -1,4 +1,4 @@
-package java.oop;
+package java_exercises.oop.designPatterns;
 
 public class SingletonExample {
     private static SingletonExample _instance;

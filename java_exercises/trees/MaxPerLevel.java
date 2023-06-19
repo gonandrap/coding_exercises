@@ -1,4 +1,4 @@
-package java.trees;
+package java_exercises.trees;
 // https://leetcode.com/problems/find-largest-value-in-each-tree-row/submissions/
 
 import java.util.ArrayList;

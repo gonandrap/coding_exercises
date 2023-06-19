@@ -1,4 +1,4 @@
-package java;
+package java_exercises;
 import java.util.HashMap;
 
 // https://leetcode.com/problems/climbing-stairs/

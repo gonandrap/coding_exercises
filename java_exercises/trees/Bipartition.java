@@ -1,4 +1,4 @@
-package java.trees;
+package java_exercises.trees;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -116,6 +116,6 @@ class Bipartition {
         int n = 10;
         int [][] edges = {{1,2},{1,3},{1,4},{1,5},{1,8},{1,6},{1,9},{1,7},{1,10}};
         Bipartition sol = new Bipartition();
-        System.out.println(sol.possibleBipartition(3, edges));
+        System.out.println(sol.possibleBipartition(n, edges));
     }
 }
