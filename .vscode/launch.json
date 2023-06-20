@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Cinema",
+            "request": "launch",
+            "mainClass": "java_exercises.oop.codingDesign.CinemaWithOnlineTicketing.Cinema",
+            "projectName": "coding_exercises_6428f261"
+        },
+        {
+            "type": "java",
             "name": "OnlineReader",
             "request": "launch",
             "mainClass": "java_exercises.oop.codingDesign.onlineReader.OnlineReader",
