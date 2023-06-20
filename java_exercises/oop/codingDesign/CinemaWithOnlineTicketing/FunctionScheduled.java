@@ -19,10 +19,6 @@ public class FunctionScheduled {
         this.timeOfDay = timeOfDay;
     }
 
-    public String getId() {
-        return String.format("%s_%s", movie.getTitle(), timeOfDay.toString());
-    }
-
     public Room getRoom() {
         return room;
     }

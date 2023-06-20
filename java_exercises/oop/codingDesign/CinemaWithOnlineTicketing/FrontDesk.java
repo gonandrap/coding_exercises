@@ -1,6 +1,8 @@
 package java_exercises.oop.codingDesign.CinemaWithOnlineTicketing;
 
-import java.sql.Date;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class FrontDesk {
     
@@ -9,6 +11,7 @@ public class FrontDesk {
 
     public FrontDesk(Cinema cinema, BookingSystem bookingSystem) {
         this.cinema = cinema;
+        this.bookingSystem = bookingSystem;
     }
 
     public boolean validateTicket(Ticket ticket, Date date) {
@@ -19,4 +22,10 @@ public class FrontDesk {
         }
         return validation;
     }
+
+    public boolean validateTicket(Ticket ticket, String date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return validateTicket(ticket, formatter.parse(date));
+    }
+
 }

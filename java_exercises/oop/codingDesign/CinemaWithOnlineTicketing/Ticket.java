@@ -38,4 +38,8 @@ public class Ticket {
     public Date getDate() {
         return date;
     }
+
+    public String getMovieName() {
+        return movieName;
+    }
 }

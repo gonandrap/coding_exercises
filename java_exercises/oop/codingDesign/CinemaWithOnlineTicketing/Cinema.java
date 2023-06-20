@@ -1,5 +1,6 @@
 package java_exercises.oop.codingDesign.CinemaWithOnlineTicketing;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,8 +37,14 @@ public class Cinema {
         }
     }
 
+    /**
+     * Testing wise
+     */
+    public BookingSystem getbBookingSystem() {
+        return bookingSystem;
+    }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         Room room = new Room("room1", 10, 10);
         Room room2 = new Room("room2", 20, 10);
 
@@ -49,16 +56,32 @@ public class Cinema {
         };
 
         Cinema cinema = new Cinema(rooms);
-        Movie movie1 = new Movie("Matrix 1");
+        Movie movie1 = addMovie(cinema, "Matrix 1", "2023-06-01", "2023-07-01");
+        Movie movie2 = addMovie(cinema, "Matrix 2", "2023-08-01", "2023-09-01");
+
+        BookingSystem booking = cinema.getbBookingSystem();
+        Ticket ticketMatrix1 = booking.bookTicket(movie1, "2023-06-15", TimeOfDay.EVENING, room2, 5, 3);
+        booking.bookTicket(movie1, "2024-06-15", TimeOfDay.NIGHT, room2, 7, 3);
+        booking.bookTicket(movie2, "2023-06-13", TimeOfDay.NIGHT, room2, 7, 3);
+        Ticket ticketMatrix2 = booking.bookTicket(movie2, "2023-08-13", TimeOfDay.NIGHT, room2, 10, 3);
+
+        booking.printStatus();
+
+        FrontDesk frontDesk = new FrontDesk(cinema, booking);
+        frontDesk.validateTicket(ticketMatrix1, "2023-06-15");
+        frontDesk.validateTicket(ticketMatrix1, "2023-06-15");
+        frontDesk.validateTicket(ticketMatrix2, "2023-08-14");
+        frontDesk.validateTicket(ticketMatrix2, "2023-08-13");
+
+        booking.printStatus();
+    }
+
+    private static Movie addMovie(Cinema cinema, String movieName, String fromDate, String toDate) throws ParseException {
+        Movie movie = new Movie(movieName);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date from;
-        Date to;
-        try {
-            from = dateFormat.parse("2023-06-01");
-            to = dateFormat.parse("2023-07-01");
-            cinema.addNewMovie(movie1, from, to);
-        } catch (Exception e) {
-            System.out.println("Error parsing date");
-        }
+        Date from = dateFormat.parse(fromDate);
+        Date to = dateFormat.parse(toDate);
+        cinema.addNewMovie(movie, from, to);
+        return movie;
     }
 }
