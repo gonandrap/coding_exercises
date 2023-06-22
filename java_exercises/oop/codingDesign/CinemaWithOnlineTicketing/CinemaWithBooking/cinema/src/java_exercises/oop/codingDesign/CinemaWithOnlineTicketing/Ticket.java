@@ -12,13 +12,13 @@ public class Ticket {
     int row;
     int column;
 
-    public Ticket(Movie movie, Date date, TimeOfDay timeOfDay, Room room, int row, int column) {
+    public Ticket(String movieName, Date date, TimeOfDay timeOfDay, String roomName, int row, int column) {
         this.id = UUID.randomUUID();
 
-        this.movieName = movie.getTitle();
+        this.movieName = movieName;
         this.date = date;
         this.timeOfDay = timeOfDay;
-        this.roomName = room.getName();
+        this.roomName = roomName;
         this.row = row;
         this.column = column;
     }

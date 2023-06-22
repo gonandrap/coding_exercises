@@ -5,5 +5,6 @@
         "lib/**/*.jar",
         "c:\\Users\\gonza\\workspace\\java libraries\\javafx-sdk-20.0.1\\lib\\javafx.base.jar"
     ],
-    "terminal.integrated.automationProfile.windows": {}
+    "terminal.integrated.automationProfile.windows": {},
+    "java.compile.nullAnalysis.mode": "automatic"
 }
