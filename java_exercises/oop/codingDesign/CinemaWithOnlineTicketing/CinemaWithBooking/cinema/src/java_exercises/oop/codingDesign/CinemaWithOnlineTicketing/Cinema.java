@@ -3,9 +3,7 @@ package java_exercises.oop.codingDesign.CinemaWithOnlineTicketing;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Date;
 
 public class Cinema {

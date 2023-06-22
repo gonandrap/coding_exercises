@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Ticket {
-    UUID id;                                // could be the equivalent to a QR code            
+    String id;                                // could be the equivalent to a QR code            
     String movieName;
     Date date;
     TimeOfDay timeOfDay;
@@ -13,7 +13,7 @@ public class Ticket {
     int column;
 
     public Ticket(String movieName, Date date, TimeOfDay timeOfDay, String roomName, int row, int column) {
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
 
         this.movieName = movieName;
         this.date = date;
@@ -23,7 +23,7 @@ public class Ticket {
         this.column = column;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 

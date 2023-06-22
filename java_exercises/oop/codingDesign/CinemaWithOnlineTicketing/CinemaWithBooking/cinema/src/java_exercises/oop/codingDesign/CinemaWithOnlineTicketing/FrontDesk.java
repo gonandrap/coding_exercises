@@ -14,18 +14,26 @@ public class FrontDesk {
         this.bookingSystem = bookingSystem;
     }
 
-    public boolean validateTicket(Ticket ticket, Date date) {
-        boolean validation = bookingSystem.isValidTicket(ticket, date);
-        System.out.println(String.format("Ticket [%s] for date [%s] is validated to [%b]", ticket.getId(), date, validation));
+    public boolean validateTicket(String ticketId, Date date) {
+        boolean validation = bookingSystem.isValidTicket(ticketId, date);
+        System.out.println(String.format("Ticket [%s] for date [%s] is validated to [%b]", ticketId, date, validation));
         if (validation) {
-            bookingSystem.redeemTicket(ticket, date);
+            bookingSystem.redeemTicket(ticketId, date);
         }
         return validation;
     }
 
-    public boolean validateTicket(Ticket ticket, String date) throws ParseException {
+    public boolean validateTicket(Ticket ticket, Date date) {
+        return validateTicket(ticket.getId(), date);
+    }
+
+    public boolean validateTicket(String ticketId, String date) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        return validateTicket(ticket, formatter.parse(date));
+        return validateTicket(ticketId, formatter.parse(date));
+    }
+
+    public boolean validateTicket(Ticket ticket, String date) throws ParseException {
+        return validateTicket(ticket.getId(), date);
     }
 
 }

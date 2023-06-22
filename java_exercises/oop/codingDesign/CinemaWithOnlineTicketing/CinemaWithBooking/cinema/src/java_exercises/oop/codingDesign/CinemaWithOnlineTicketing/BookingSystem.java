@@ -7,19 +7,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class BookingSystem {
     Map<String, FunctionScheduled> moviesOffered;        // key = movie name, value = scheduled movie
-    Map<UUID, Ticket> ticketsSold;
-    Set<UUID> ticketsRedeemed;
+    Map<String, Ticket> ticketsSold;
+    Set<String> ticketsRedeemed;
     Map<String, AvailabilityCounter> functionAvailability;      // key = movieTittle_date_time_room
     Map<String, Room> availableRooms;
  
     BookingSystem() {
         moviesOffered = new HashMap<String, FunctionScheduled>();
-        ticketsSold = new HashMap<UUID, Ticket>();
-        ticketsRedeemed = new HashSet<UUID>();
+        ticketsSold = new HashMap<String, Ticket>();
+        ticketsRedeemed = new HashSet<String>();
         functionAvailability = new HashMap<String, AvailabilityCounter>();
         availableRooms = new HashMap<String, Room>();
     }
@@ -56,15 +55,15 @@ public class BookingSystem {
         }
     }
 
-    public boolean isValidTicket(Ticket ticket, Date date) {
-        return (ticketsSold.containsKey(ticket.getId())) &&
-                (ticketsRedeemed.contains(ticket.getId()) == false) &&
-                validateTicketDate(ticket, date);
+    public boolean isValidTicket(String ticketId, Date date) {
+        return (ticketsSold.containsKey(ticketId)) &&
+                (ticketsRedeemed.contains(ticketId) == false) &&
+                validateTicketDate(ticketsSold.get(ticketId), date);
     }
 
-    public void redeemTicket(Ticket ticket, Date date) {
-        if (isValidTicket(ticket, date)) {
-            ticketsRedeemed.add(ticket.getId());
+    public void redeemTicket(String ticketId, Date date) {
+        if (isValidTicket(ticketId, date)) {
+            ticketsRedeemed.add(ticketId);
         }
     }
 
@@ -75,12 +74,12 @@ public class BookingSystem {
         }
 
         System.out.println("Tickets sold");
-        for (Map.Entry<UUID, Ticket> entry : ticketsSold.entrySet()) {
-            System.out.println(String.format("\tTicket for movie {%s} was sold", entry.getValue().getMovieName()));
+        for (Map.Entry<String, Ticket> entry : ticketsSold.entrySet()) {
+            System.out.println(String.format("\tTicket {%s} for movie {%s} was sold", entry.getKey(), entry.getValue().getMovieName()));
         }
 
         System.out.println("Tickets redeemed");
-        for (UUID redeemed : ticketsRedeemed) {
+        for (String redeemed : ticketsRedeemed) {
             System.out.println(String.format("\tTicket {%s} for movie {%s} was sold", redeemed, ticketsSold.get(redeemed).getMovieName()));
         }
     }
