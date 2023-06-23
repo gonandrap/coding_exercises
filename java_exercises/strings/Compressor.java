@@ -3,7 +3,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+/*
+ * Implementation note about performance
+ *  I'm not calculating the compressed result length upfront, so I'm creating an empty StringBuilder that will resize when it needs,
+ *  so every resizing will be costly!
+ * Performance improvement : figure out the length of the result (linear pass), create the builder with that size and start adding 
+ * chars -> no resizes will be made!
+ */
 public class Compressor {
     public String compress(String s) {
         
