@@ -75,7 +75,9 @@ insert into studentcourses (courseid, studentid) values
 (3, 1),
 (3, 3),
 (3, 5),
+(3, 6),
 (3, 7),
+(3, 8),
 (4, 4),
 (4, 5),
 (4, 6),
@@ -91,6 +93,7 @@ insert into studentcourses (courseid, studentid) values
 (6, 5),
 (6, 6),
 (6, 7);
+
 --
 -- ################# END DATA POPULATION #################
 
