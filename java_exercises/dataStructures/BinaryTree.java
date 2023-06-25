@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 /*
@@ -15,10 +14,6 @@ import java.util.Stack;
 
 public class BinaryTree<T> {
     
-    enum Edge {
-        LEFT, ROOT, RIGHT;
-    }
-
     class Intention {
         static public final int LEFT = 0;
         static public final int ROOT = 1;
