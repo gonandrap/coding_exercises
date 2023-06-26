@@ -1,6 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 /*
@@ -143,8 +146,69 @@ public class BinaryTree<T> {
         return builder;
     }
 
+    public HashMap<T, TreeNode<T>> findBranch(T elem1) {
+        HashMap<T, TreeNode<T>> backtrackingParents = new HashMap<T, TreeNode<T>>();
+        findBranchSmart(root, elem1, backtrackingParents);
+        return backtrackingParents;
+    }
+
+    public TreeNode<T> findBranchSmart(TreeNode<T> currentNode, T elem1, HashMap<T, TreeNode<T>> backtrackingParents) {
+        if (currentNode == null) {
+            return null;
+        } else {
+            if (elem1 == currentNode.val) {
+                return currentNode;
+            }
+
+            // try to find the elem on the left or right
+            TreeNode<T> foundNode = findBranchSmart(currentNode.left, elem1, backtrackingParents);
+            if ( foundNode != null) {
+                backtrackingParents.put(foundNode.val, currentNode);
+                return currentNode;
+            }
+            foundNode = findBranchSmart(currentNode.right, elem1, backtrackingParents);
+            if (foundNode != null) {
+                backtrackingParents.put(foundNode.val, currentNode);
+                return currentNode;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    /*
+     * Coding challenge : find the least common ancestor between two nodes that EXIST in the tree. The three doesnt have dups.
+     */
+    public T findLeastCommonAcenstor(T elem1, T elem2) {
+        HashMap<T, TreeNode<T>> backtrackingParents1 = findBranch(elem1);
+        HashMap<T, TreeNode<T>> backtrackingParents2 = findBranch(elem2);
+        
+        Set<T> branch1 = new HashSet<T>();
+        branch1.add(elem1);
+
+        TreeNode<T> branchElem1 = backtrackingParents1.get(elem1);
+        while (branchElem1 != null) {
+            branch1.add(branchElem1.val);
+            branchElem1 = backtrackingParents1.get(branchElem1.val);
+        }
+
+        if (branch1.contains(elem2)) {
+            return elem2;
+        }
+
+        TreeNode<T> branchElem2 = backtrackingParents2.get(elem2);
+        while (branchElem2 != null && branch1.contains(branchElem2.val) == false) {
+            branchElem2 = backtrackingParents2.get(branchElem2.val);
+        }
+        
+        return branchElem2.val;
+    }
+
     public static void main(String[] args) {
         BinaryTree<Integer> tree = new BinaryTree<Integer>(List.of(1,2,3,-1,-1,4,-1,5,-1,-1,6,7,-1,-1,8,9,-1,-1,10,-1,-1));
         System.out.println(String.format("BinaryTree -> %s", tree.toString()));
+
+        int leastCommonAncestor = tree.findLeastCommonAcenstor(4, 5);
+        System.out.println("Least common ancestor : " + leastCommonAncestor);
     }
 }
