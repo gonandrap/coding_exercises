@@ -48,6 +48,6 @@ public class RoomController {
         
         List<Room> rooms = cinema.getRooms();
         
-        return String.format("{'number':%d}", rooms.size());
+        return String.format("{'numberOfRooms':%d}", rooms.size());
     }
 }

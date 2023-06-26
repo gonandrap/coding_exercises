@@ -3,8 +3,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+
+import java_exercises.trees.TreeNode;
 
 /*
  * The big issue when trying to create the tree recursive accepting a node-list in DFS mode is that, from the list, I don't never
@@ -117,19 +120,41 @@ public class BinaryTree<T> {
     }
 
 
-    public void addLeft(T val) {
-        assert(root != null);
-        root.left = new TreeNode<T>(val);
+    /*
+     * Coding challenge : implement find function using an iterative version of BFS
+     */
+    public boolean iterativeBFSFind(T elem) {
+        /*
+         * data structure to keep of track of "collected" child during the level iteration -> queue since I want to process left to right.
+         * i finish then there are no more childs (elems on the queue) to visit
+         */
+        Queue<TreeNode<T>> childsToVisit = new LinkedList<TreeNode<T>>();
+        
+        if (root == null) {
+            return false;
+        }
+
+        childsToVisit.add(root);
+        TreeNode<T> currentNode = null;
+        while (!childsToVisit.isEmpty()) {
+            currentNode = childsToVisit.poll();
+
+            if (currentNode.val == elem) {
+                return true;
+            }
+            
+            if (currentNode.left != null) {
+                childsToVisit.add(currentNode.left);
+            }
+
+            if (currentNode.right != null) {
+                childsToVisit.add(currentNode.right);
+            }
+        }
+        return false;
     }
 
-    public void addRight(T val) {
-        assert(root != null);
-        root.right = new TreeNode<T>(val);
-    }
 
-    public boolean isEmpty() {
-        return root == null;
-    }
 
     public String toString() {
         return iterateNodes(new StringBuilder(3*numberNodes), root).append("[]").toString();
@@ -210,5 +235,8 @@ public class BinaryTree<T> {
 
         int leastCommonAncestor = tree.findLeastCommonAcenstor(4, 5);
         System.out.println("Least common ancestor : " + leastCommonAncestor);
+
+        int elemToFind = 12;
+        System.out.println(String.format("Trying to find elem [%s] : %b", elemToFind, tree.iterativeBFSFind(elemToFind)));
     }
 }
