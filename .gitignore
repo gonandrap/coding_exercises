@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/visual studio/VisualStudio2022/.vs/VisualStudio2022
+/visual studio/VisualStudio2022/DataStructures/x64/Debug
+/visual studio/VisualStudio2022/x64/Debug
