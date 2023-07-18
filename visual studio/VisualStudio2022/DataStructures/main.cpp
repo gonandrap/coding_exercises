@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
     std::list<int> elems({1, 2, 3, -1, 4, -1, -1, 5, 6, -1, -1, -1, 7});
-    Tree<int>* tree = Tree<int>::create(elems, -1);
+    BinaryTree<int>* tree = BinaryTree<int>::createBFS(elems, -1);
     std::cout << "Hello World from my new project for my name solution!\n";
 
     std::list<int> bfs = tree->bfs_iteration();
