@@ -1,4 +1,8 @@
 
+#ifndef __TREE_HPP__
+#define __TREE_HPP__
+
+
 #include <list>
 #include <queue>
 
@@ -24,7 +28,7 @@ public:
 	/*
 	* create the tree using the elemsns from the list, in BFS	
 	*/
-	static BinaryTree* createBFS(std::list<T>& elems, const T& NOT_VALUE_ID);
+	static BinaryTree* createBFS(std::list<T>& elems);
 
 	bool is_empty(void) const;
 	bool has_left_child(void) const;
@@ -38,7 +42,7 @@ private:
 
 	static BinaryTree<T>* process_tree(std::list<T>& elems, const T& NOT_VALUE_ID);
 	static BinaryTree<T>* process_level(std::list<T>& elems, BinaryTree<T>* tree, const T& NOT_VALUE_ID);
-	static void process_level_bfs(std::list<T> & elems, int level_size, std::queue<BinaryTree<T>*> & current_level, const T& NOT_VALUE_ID);
+	static void process_level_bfs(std::list<T> & elems, size_t level_size, std::queue<BinaryTree<T>*> & current_level);
 	static void process_right_child(std::list<T>& elems, BinaryTree<T>* parent_tree, const T& NOT_VALUE_ID);
 };
 
@@ -57,7 +61,7 @@ BinaryTree<T>* BinaryTree<T>::createDFS(std::list<T>& elems, const T& NOT_VALUE_
 }
 
 template <class T>
-BinaryTree<T>* BinaryTree<T>::createBFS(std::list<T>& elems, const T& NOT_VALUE_ID)
+BinaryTree<T>* BinaryTree<T>::createBFS(std::list<T>& elems)
 {
 	BinaryTree<T>* tree = nullptr;
 
@@ -70,7 +74,7 @@ BinaryTree<T>* BinaryTree<T>::createBFS(std::list<T>& elems, const T& NOT_VALUE_
 
 		while (!elems.empty())
 		{
-			BinaryTree<T>::process_level_bfs(elems, current_level.size(), current_level, NOT_VALUE_ID);
+			BinaryTree<T>::process_level_bfs(elems, current_level.size(), current_level);
 		}
 		
 	}
@@ -174,7 +178,7 @@ BinaryTree<T>* BinaryTree<T>::process_level(std::list<T>& elems, BinaryTree<T>* 
 }
 
 template <class T>
-void BinaryTree<T>::process_level_bfs(std::list<T> & elems, int level_size, std::queue<BinaryTree<T>*> & tree_level, const T& NOT_VALUE_ID)
+void BinaryTree<T>::process_level_bfs(std::list<T> & elems, size_t level_size, std::queue<BinaryTree<T>*> & tree_level)
 {
 	/*
 	* Will iterate the queue, create trees from it and place it as child of the corresponding parents. Those created
@@ -220,3 +224,5 @@ void BinaryTree<T>::process_right_child(std::list<T>& elems, BinaryTree<T>* pare
 		elems.pop_front();				// remove NOT_VALUE_ID to move to the next node in a superior level
 	}
 }
+
+#endif // !__TREE_HPP__
