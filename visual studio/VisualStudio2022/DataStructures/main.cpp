@@ -6,14 +6,30 @@
 #include "complete_tree.hpp"
 #include "heap.hpp"
 #include "double_linked_list.hpp"
+#include "stack.hpp"
 #include <list>
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 
 bool less_than(int* a, int* b)
 {
     return *a < *b;
+}
+
+void test_stack(void)
+{
+    Stack<int>* stack = new Stack<int>();
+    stack->push(1);
+    stack->push(5);
+    stack->push(2);
+    assert(stack->top() == 2);
+    stack->pop();
+    stack->pop();
+    assert(stack->top() == 1);
+    stack->pop();
+    assert(stack->size() == 0);
 }
 
 void test_double_link_list(void)
@@ -26,6 +42,10 @@ void test_double_link_list(void)
     l->add_front(8);
 
     l->remove_front();
+    l->remove_back();
+    l->remove_back();
+
+    DoubleLinkedList<int>* l2 = new DoubleLinkedList<int>(*l);
 
     std::cout << "finished" << std::endl;
 }
@@ -50,5 +70,5 @@ void test_tree()
 
 int main()
 {
-    test_double_link_list();
+    test_stack();
 }
