@@ -12,6 +12,7 @@ class Heap
 	{
 		T* value;
 		heap_node* parent;								// all childs from the same bucket belong to the same parent
+		heap_node* next_sibling;						// needed to move to the next node in the father when current one has both childs filled up
 		heap_node* left_node;
 		heap_node* right_node;
 	};
@@ -19,9 +20,9 @@ class Heap
 	size_t childs_per_bucket;
 	heap_node* root_node;
 	heap_node* last_parent_node;								// keep track of the last bucket where childs were added
-	heap_node* most_left_leaf;							// PENDING this will become the parent of new nodes for a new level of the Heap
+	heap_node* most_left_leaf;									// nedeed because this becomes the parent of new nodes for a new level of the Heap
 
-	Heap(T root_value, size_t childs_per_bucket = 2) : childs_per_bucket(childs_per_bucket), root_node(new heap_node{ new T(root_value), nullptr, nullptr, nullptr}), last_parent_node(root_node)
+	Heap(T root_value, size_t childs_per_bucket = 2) : childs_per_bucket(childs_per_bucket), root_node(new heap_node{ new T(root_value), nullptr, nullptr, nullptr, nullptr}), last_parent_node(root_node), most_left_leaf(root_node)
 	{}
 
 	heap_node* add_heap_node(heap_node** where_to_add, heap_node* parent, T& value);
@@ -38,18 +39,24 @@ template <class T>
 void Heap<T>::add_node(T& value)
 {
 	// check the Heap is well-formed
-	assert(this->root_node != nullptr && this->last_parent_node != nullptr);
+	assert(this->root_node != nullptr);
+	assert(this->last_parent_node != nullptr);
+	assert(this->most_left_leaf != nullptr);
 
 	if (this->last_parent_node->left_node == nullptr)
 	{
-		this->add_heap_node(&this->last_parent_node->left_node, this->last_parent_node, value);
+		// since we have a new most left leaf, update that value too
+		this->most_left_leaf = this->add_heap_node(&this->last_parent_node->left_node, this->last_parent_node, value);		
 	}
 	else if (this->last_parent_node->right_node == nullptr)
 	{
-		this->add_heap_node(&this->last_parent_node->right_node, this->last_parent_node, value);
+		this->last_parent_node->left_node->next_sibling = this->add_heap_node(&this->last_parent_node->right_node, this->last_parent_node, value);
 	}
 	else if (this->last_parent_node == this->root_node)					// QUESTION : can include last else clause in here too?
 	{
+		// since there are no more siblings in the level, make that explicit
+		this->last_parent_node->right_node->next_sibling = nullptr;
+		
 		// only for the root node, once both childs are cover, we need to create a new level
 		this->add_new_level(value);
 	}
@@ -61,8 +68,20 @@ void Heap<T>::add_node(T& value)
 		// since we move to the parent node in the right, we have to update "last_parent_node"
 		this->last_parent_node = this->last_parent_node->parent->right_node;
 	}
+	else if (this->last_parent_node->next_sibling != nullptr)
+	{
+		// since are adding a node to the same level, need to update "next_sibling" of the current latest node of the level
+		this->last_parent_node->right_node->next_sibling = this->add_heap_node(&this->last_parent_node->next_sibling->left_node, this->last_parent_node->next_sibling, value);
+		
+		// move to the next parent node (sibling of current one) within the same level
+		this->last_parent_node = this->last_parent_node->next_sibling;
+	}
 	else
 	{
+		// since there are no more siblings in the level, make that explicit
+		this->last_parent_node->right_node->next_sibling = nullptr;
+
+		// if all before is false (including the fact that there are no more siblings), then add a new level
 		this->add_new_level(value);
 	}
 
@@ -78,12 +97,14 @@ void Heap<T>::add_new_level(T& value)
 
 	// The new node will become the "most_left_leaf"
 	this->most_left_leaf = this->add_heap_node(&this->most_left_leaf, this->last_parent_node, value);
+
+	this->last_parent_node->left_node = this->most_left_leaf;
 }
 
 template <class T>
 typename Heap<T>::heap_node* Heap<T>::add_heap_node(typename Heap<T>::heap_node** where_to_add, typename Heap<T>::heap_node* parent, T& value)
 {
-	*where_to_add = new typename Heap<T>::heap_node(new T(value), parent, nullptr, nullptr);
+	*where_to_add = new typename Heap<T>::heap_node(new T(value), parent, nullptr, nullptr, nullptr);
 	return *where_to_add;
 }
 

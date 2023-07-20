@@ -14,6 +14,7 @@ void test_heap()
 {
     std::list<int> elems{1, 2, 3, 9, 4, 2, 5, 5, 6, 7, 4};
     Heap<int>* heap = Heap<int>::create(elems);
+    std::cout << "finished" << std::endl;
 }
 
 void test_tree()
