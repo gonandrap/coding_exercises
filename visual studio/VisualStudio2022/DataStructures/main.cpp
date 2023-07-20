@@ -10,10 +10,15 @@
 
 using namespace std;
 
+bool less_than(int* a, int* b)
+{
+    return *a < *b;
+}
+
 void test_heap()
 {
     std::list<int> elems{1, 2, 3, 9, 4, 2, 5, 5, 6, 7, 4};
-    Heap<int>* heap = Heap<int>::create(elems);
+    Heap<int>* heap = Heap<int>::create(elems, less_than);
     std::cout << "finished" << std::endl;
 }
 
