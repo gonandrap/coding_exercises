@@ -5,6 +5,7 @@
 #include "tree.hpp"
 #include "complete_tree.hpp"
 #include "heap.hpp"
+#include "double_linked_list.hpp"
 #include <list>
 #include <iostream>
 
@@ -13,6 +14,20 @@ using namespace std;
 bool less_than(int* a, int* b)
 {
     return *a < *b;
+}
+
+void test_double_link_list(void)
+{
+    DoubleLinkedList<int>* l = new DoubleLinkedList<int>();
+    l->add_front(1);
+    l->add_front(6);
+    l->add_front(7);
+    l->add_front(0);
+    l->add_front(8);
+
+    l->remove_front();
+
+    std::cout << "finished" << std::endl;
 }
 
 void test_heap()
@@ -35,5 +50,5 @@ void test_tree()
 
 int main()
 {
-    test_heap();
+    test_double_link_list();
 }

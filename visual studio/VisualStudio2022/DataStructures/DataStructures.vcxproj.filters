@@ -21,9 +21,15 @@
     <ClCompile Include="complete_tree.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="double_linked_list.hpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tree.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="heap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
