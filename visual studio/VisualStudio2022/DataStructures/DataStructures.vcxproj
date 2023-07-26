@@ -142,6 +142,7 @@
     <ClInclude Include="bitwise.h" />
     <ClInclude Include="heap.hpp" />
     <ClInclude Include="multithreading.h" />
+    <ClInclude Include="queue_by_stacks.hpp" />
     <ClInclude Include="tree.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

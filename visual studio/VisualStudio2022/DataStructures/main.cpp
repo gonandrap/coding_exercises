@@ -10,6 +10,7 @@
 #include "multithreading.h"
 #include "bitwise.h"
 #include "algorithms.h"
+#include "queue_by_stacks.hpp"
 #include <list>
 #include <iostream>
 #include <cassert>
@@ -117,7 +118,25 @@ void test_path_normalizer()
     std::cout << path << std::endl;
 }
 
+void test_queue_by_stack()
+{
+    datastructure::QueueByStack<int> queue;
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
+    queue.push(4);
+    queue.push(5);
+    queue.push(6);
+
+    int elem;
+    while (!queue.empty())
+    {
+        std::cout << queue.front() << std::endl;
+        queue.pop();
+    } 
+}
+
 int main()
 {   
-    test_path_normalizer();
+    test_queue_by_stack();
 }

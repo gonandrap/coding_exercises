@@ -53,5 +53,8 @@
     <ClInclude Include="algorithms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="queue_by_stacks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
