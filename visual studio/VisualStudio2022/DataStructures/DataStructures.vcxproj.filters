@@ -27,12 +27,24 @@
     <ClCompile Include="stack.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Multithreading\multithreading.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bitwise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tree.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="heap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="multithreading.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bitwise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,6 +2,7 @@
 #define __DOUBLE_LINKED_LIST_H__
 
 #include <cassert>
+#include <stack>
 
 template <class T>
 class DoubleLinkedList
@@ -28,10 +29,13 @@ public:
 	void add_front(const T& elem);
 	T& front_elem(void);
 	void remove_front(void);
-	
+
 	void add_back(const T& elem);
 	T& back_elem(void);
 	void remove_back(void);
+	void remove_back(size_t k);				// The caveat is that I'm going to remove assuming it's just a singled-linked list. Optimization: have two iterators i and j. j starts at i+k.
+
+	bool is_palindromic(void);				// Caveat : assume is single-linked
 
 	size_t length(void) const;
 
@@ -122,6 +126,91 @@ void DoubleLinkedList<T>::remove_back(void)
 	delete(to_remove);
 	this->size--;
 }
+
+template <class T>
+void DoubleLinkedList<T>::remove_back(size_t k)
+{
+	if (k == 0) return;
+
+	assert(this->root != nullptr);
+
+	// calculate the size	
+	typename DoubleLinkedList<T>::node* current_node = this->root;
+	size_t size = 1;
+	while (current_node->next != nullptr)
+	{
+		current_node = current_node->next;
+		++size;
+	}
+
+	// find the the previous node to the new last one
+	int nodes_to_advance = size - k;
+
+	current_node = this->root;
+	while (nodes_to_advance > 1)
+	{
+		current_node = current_node->next;
+		--nodes_to_advance;
+	}
+	
+	// list[size - k - 1] becomes the new last element;
+	this->last = current_node;
+	
+	// move to the first element to be deleted
+	current_node = current_node->next;
+
+	// delete the remaining nodes (size - (size - k) -> k)
+	typename DoubleLinkedList<T>::node* tmp;
+	while (current_node != nullptr)
+	{
+		tmp = current_node->next;
+		delete(current_node);
+		current_node = tmp;
+	}
+
+	// finally, update the last element
+	this->last->next = nullptr;
+}
+
+template <class T>
+bool DoubleLinkedList<T>::is_palindromic(void)
+{
+	// calculate the size	
+	typename DoubleLinkedList<T>::node* current_node = this->root;
+	size_t size = 1;
+	while (current_node->next != nullptr)
+	{
+		current_node = current_node->next;
+		++size;
+	}
+
+	if (size % 2 == 0) return false;
+
+	int mid_list = size / 2 + 1;
+
+	std::stack<T> stack;
+	current_node = this->root;
+	while (mid_list > 0)
+	{
+		stack.push(*current_node->value);
+		current_node = current_node->next;
+		--mid_list;
+	}
+
+	// remove element in the middle
+	stack.pop();
+
+	// compare second half of elements using the accumulated stack
+	while (current_node != nullptr && *current_node->value == stack.top())
+	{
+		current_node = current_node->next;
+		stack.pop();
+	}
+
+	return current_node == nullptr;			// if I reached the end, then we have a palyndrome
+}
+
+
 template <class T>
 size_t DoubleLinkedList<T>::length(void) const
 {

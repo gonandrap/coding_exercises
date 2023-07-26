@@ -25,7 +25,7 @@ void sum(int a, int b)
     }
 }
 
-int main()
+void test_threads()
 {
     std::cout << "Starting" << std::endl;
 
@@ -43,4 +43,5 @@ int main()
 
     std::cout << "Finished" << std::endl;
 }
+
 

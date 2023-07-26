@@ -7,9 +7,13 @@
 #include "heap.hpp"
 #include "double_linked_list.hpp"
 #include "stack.hpp"
+#include "multithreading.h"
+#include "bitwise.h"
 #include <list>
 #include <iostream>
 #include <cassert>
+
+
 
 using namespace std;
 
@@ -68,7 +72,40 @@ void test_tree()
     copy(bfs.cbegin(), bfs.cend(), ostream_iterator<int>(cout, " "));
 }
 
-int main()
+
+void test_bitwise_mask()
 {
-    test_stack();
+    std::cout << bitwise::solution(1073741727, 1073741631, 1073741679);
+}
+
+void test_remove_k_from_list()
+{
+    DoubleLinkedList<int>* l = new DoubleLinkedList<int>();
+    l->add_front(1);
+    l->add_front(6);
+    l->add_front(7);
+    l->add_front(0);
+    l->add_front(8);
+
+    l->remove_back(2);
+}
+
+void test_palindromic_list()
+{
+    DoubleLinkedList<int>* l = new DoubleLinkedList<int>();
+    l->add_back(1);
+    l->add_back(6);
+    l->add_back(7);
+    l->add_back(0);
+    l->add_back(7);
+    l->add_back(6);
+    l->add_back(1);
+    bool result = l->is_palindromic();
+
+    std::cout << result << endl;
+}
+
+int main()
+{   
+    test_palindromic_list();
 }
