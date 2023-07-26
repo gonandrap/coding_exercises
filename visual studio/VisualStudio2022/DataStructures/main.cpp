@@ -9,6 +9,7 @@
 #include "stack.hpp"
 #include "multithreading.h"
 #include "bitwise.h"
+#include "algorithms.h"
 #include <list>
 #include <iostream>
 #include <cassert>
@@ -105,7 +106,18 @@ void test_palindromic_list()
     std::cout << result << endl;
 }
 
+void test_path_normalizer()
+{
+    std::string s = "/s/g/.///../../hola/test/prueba";
+    std::string path = algorithms::path_normalizer(s);
+    std::cout << path << std::endl;
+
+    s = "./s/g/.///../../hola/test/prueba";
+    path = algorithms::path_normalizer(s);
+    std::cout << path << std::endl;
+}
+
 int main()
 {   
-    test_palindromic_list();
+    test_path_normalizer();
 }
