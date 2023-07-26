@@ -15,6 +15,9 @@
 #include <iostream>
 #include <cassert>
 
+#include <unordered_map>
+#include <set>
+
 
 
 using namespace std;
@@ -136,7 +139,15 @@ void test_queue_by_stack()
     } 
 }
 
+void test_exterior_nodes()
+{
+    std::list<int> elems{1, 2, 3, 9, -1, -1, 4, -1, -1, 5, 6, -1, -1, -1, 7, -1, 6, 9, -1, -1, 5, -1, -1};
+    BinaryTree<int>* tree = BinaryTree<int>::createDFS(elems, -1);
+    std::list<int> results = tree->exterior_nodes();
+    std::copy(results.begin(), results.end(), std::ostream_iterator<int>(std::cout, " "));
+}
+
 int main()
 {   
-    test_queue_by_stack();
+    test_exterior_nodes();
 }

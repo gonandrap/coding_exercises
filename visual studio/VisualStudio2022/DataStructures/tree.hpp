@@ -5,6 +5,7 @@
 
 #include <list>
 #include <queue>
+#include <cassert>
 
 template <class T>
 class BinaryTree
@@ -30,7 +31,13 @@ public:
 	*/
 	static BinaryTree* createBFS(std::list<T>& elems);
 
+	/*
+	* Exterior nodes : most left branch from root to leaf, leafs from left to right, most rigth branch, from leaf to root.
+	*/
+	std::list<T> exterior_nodes(void) const;
+
 	bool is_empty(void) const;
+	bool is_leaf(void) const;
 	bool has_left_child(void) const;
 	bool has_right_child(void) const;
 
@@ -39,6 +46,10 @@ public:
 private:
 	BinaryTree() : value(nullptr), left_child(nullptr), right_child(nullptr)
 	{}
+
+	void most_left_branch(std::list<T> & result) const;
+	void most_right_branch(std::list<T>& result, typename std::list<T>::iterator pos_to_insert_elems) const;
+	void internal_leafs_rec(const BinaryTree<T>* iteration_node, std::list<T>& leafs) const;			// get all leafs (left to right) except the one on the most left and most right
 
 	static BinaryTree<T>* process_tree(std::list<T>& elems, const T& NOT_VALUE_ID);
 	static BinaryTree<T>* process_level(std::list<T>& elems, BinaryTree<T>* tree, const T& NOT_VALUE_ID);
@@ -80,6 +91,12 @@ BinaryTree<T>* BinaryTree<T>::createBFS(std::list<T>& elems)
 	}
 
 	return tree;
+}
+
+template <class T>
+bool BinaryTree<T>::is_leaf(void) const
+{
+	return this->left_child == nullptr && this->right_child == nullptr;
 }
 
 template <class T>
@@ -132,11 +149,79 @@ std::list<T> BinaryTree<T>::bfs_iteration(void) const
 	return result;
 }
 
+template <class T>
+void BinaryTree<T>::internal_leafs_rec(const BinaryTree<T> * iteration_node, std::list<T> & leafs) const
+{
+	if (iteration_node->left_child == nullptr && iteration_node->right_child == nullptr)
+	{
+		leafs.push_back(*iteration_node->value);
+	}
+	else
+	{
+		if (iteration_node->left_child != nullptr)	this->internal_leafs_rec(iteration_node->left_child, leafs);
+		if (iteration_node->right_child != nullptr)	this->internal_leafs_rec(iteration_node->right_child, leafs);
+	}
+}
 
+template <class T>
+std::list<T> BinaryTree<T>::exterior_nodes(void) const
+{
+	std::list<T> result;
+	most_left_branch(result);
+
+	// TODO for the leafs, I could just use the BFS functionality and get rid of the first and last elem
+	this->internal_leafs_rec(this, result);
+
+	/*
+	* To calculate most right branch, iterate DFS (root to leaf) but insert at a fixed position (end of list before starting inserting most right branch), that would put them in reverse order, which is the desire
+	*/
+	typename std::list<T>::iterator insert_position = result.end();
+	most_right_branch(result, insert_position);		// TODO : update to not include most right leaf
+
+	return result;
+}
 
 
 
 // AUXILIAR FUNCTIONS
+template <class T>
+void BinaryTree<T>::most_left_branch(std::list<T>& result) const
+{
+	if (this->value == nullptr) return;
+
+	result.push_back(*this->value);
+	
+	const BinaryTree<T>* tree_iteration = this;
+	while (tree_iteration->left_child != nullptr)
+	{
+		tree_iteration = tree_iteration->left_child;
+		assert(tree_iteration->value != nullptr);
+		if (tree_iteration->is_leaf())	return;
+
+		// don't include the most left leaf
+		result.push_back(*tree_iteration->value);
+	}
+}
+
+template <class T>
+void BinaryTree<T>::most_right_branch(std::list<T>& result, typename std::list<T>::iterator it) const
+{
+	if (this->value == nullptr) return;
+
+	result.insert(it, *this->value);
+
+	const BinaryTree<T>* tree_iteration = this;
+	while (tree_iteration->right_child != nullptr)
+	{
+		--it;		// make sure we always insert at "front" of what was the last element inserted
+		tree_iteration = tree_iteration->right_child;
+		assert(tree_iteration->value != nullptr);
+
+		if (tree_iteration->is_leaf())	return;
+
+		result.insert(it, *tree_iteration->value);
+	}
+}
 
 template <class T>
 BinaryTree<T>* BinaryTree<T>::process_tree(std::list<T>& elems, const T& NOT_VALUE_ID)
