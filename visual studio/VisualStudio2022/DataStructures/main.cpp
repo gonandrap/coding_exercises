@@ -11,12 +11,16 @@
 #include "bitwise.h"
 #include "algorithms.h"
 #include "queue_by_stacks.hpp"
+#include "big_file.h"
+#include "geometry.h"
 #include <list>
 #include <iostream>
 #include <cassert>
 
 #include <unordered_map>
 #include <set>
+#include <math.h>
+#include <vector>
 
 
 
@@ -147,7 +151,178 @@ void test_exterior_nodes()
     std::copy(results.begin(), results.end(), std::ostream_iterator<int>(std::cout, " "));
 }
 
+void test_big_file()
+{
+    datastructure::BigFile bigFile("example_file.txt", 10);
+    bigFile.load_in_memory(10, 20);
+    std::cout << bigFile.in_memory() << std::endl;
+
+    bigFile.load_in_memory(15, 20);
+    std::cout << bigFile.in_memory() << std::endl;
+}
+
+void test_sort_big_file()
+{
+    //algorithms::sort_big_file("many_numbers.txt");
+    std::string chunk = "19048509438059";
+    std::sort(chunk.begin(), chunk.end());
+    std::cout << chunk << std::endl;
+}
+
+int solution(int inner, int outer, vector<double>& points_x, vector<double>& points_y) {
+    /*
+    * hypotenuse = sqrt(x^2+y^2)
+    * if inner < hypotenuse < outer -> count it!
+    */
+    int count = 0;
+    for (size_t i = 0; i < points_x.size(); ++i)
+    {
+        double x = points_x[i];
+        double y = points_y[i];
+        double hypotenuse = sqrt(pow(x, 2) + pow(y, 2));
+        //std::cout << inner << " " << hypotenuse << " " << outer << "->" << ((inner < hypotenuse) && (hypotenuse < outer)) << std::endl;
+        if ((inner < hypotenuse) && (hypotenuse < outer))
+        {
+            //std::cout << x << " " << y << std::endl;
+            count += 1;
+        }
+    }
+    return count;
+}
+
+std::pair<std::vector<double>, std::vector<double>> gen_points(size_t how_many, int inner_circle, int outer_circle)
+{
+    std::vector<double> points_x, points_y;
+    while (how_many > 0)
+    {
+        double  ang = (double) rand() / RAND_MAX * 2 * M_PI;
+        double hyp = sqrt((double) rand() / RAND_MAX) * outer_circle;
+        double adj = cos(ang) * hyp;
+        double opp = sin(ang) * hyp;
+
+        points_x.push_back(adj);
+        points_y.push_back(opp);
+
+        how_many -= 1;
+    }
+    return std::make_pair(points_x, points_y);
+}
+
+
+
+bool number_found_already(int number, const std::set<int>& numbers_found)
+{
+    return numbers_found.find(number) != numbers_found.end();
+}
+
+bool not_adyacent_neighbor(const vector< vector<int> >& A, const int& i, const int& j, const int& N, const int& M, vector<vector<int>> A_new, int sequence)
+{
+    // returns true when A[i,j] is different than every possible neighbor
+
+    /* implementation notes
+    *   1. the multiple ifs could be written in one single condition. Even though would be more efficient, would be way less clear
+    *   2. don't need to check rest of the neighbors if one is equal already
+    */
+
+    bool result = true;
+    if (i > 0)
+    {
+        result = result && A[i - 1][j] != A[i][j];
+        if (A[i - 1][j] == A[i][j])
+            A_new[i][j] = A[i - 1][j];
+    }
+        
+
+    if (result && i < N - 1)
+    {
+        result = result && A[i + 1][j] != A[i][j];
+        if (A[i + 1][j] == A[i][j])
+            A_new[i][j] = A[i + 1][j];
+    }
+        
+
+    if (result && j > 0)
+    {
+        result = result && A[i][j - 1] != A[i][j];
+        if (A[i][j - 1] == A[i][j])
+            A_new[i][j] = A[i][j - 1];
+    }
+        
+
+    if (result && j < M - 1)
+    {
+        result = result && A[i][j + 1] != A[i][j];
+        if (A[i][j + 1] == A[i][j])
+            A_new[i][j] = A[i][j + 1];
+    }
+        
+
+    return result;
+}
+
+int solution(vector< vector<int> >& A) {
+    /*
+    * count a number for current A[i,j] if:
+    *   * A[i,j] hasn't been considered yet or
+    *   * neighbors (north, south, west, east) don't have it
+    */
+
+    std::set<int> numbers_found;
+    int number_countries = 0;
+    int N = A.size();
+    int M = A.front().size();
+    vector<vector<int>> A_new(N, vector<int>(M, -1));
+    int sequence = 0;
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < M; ++j)
+        {
+            if (not_adyacent_neighbor(A, i, j, N, M, A_new, sequence))
+            {
+                sequence += 1;
+                A_new[i][j] = sequence;
+                number_countries += 1;
+            }
+            else
+            {
+                
+            }
+        }
+    }
+
+    number_countries = 0;
+    // iterate again an just count different numbers
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < M; ++j)
+        {
+            std::cout << i << " " << j << " " << A_new[i][j] << "->" << !number_found_already(A_new[i][j], numbers_found) << "           ";
+            if (!number_found_already(A_new[i][j], numbers_found))
+            {
+                numbers_found.emplace(A_new[i][j]);
+                number_countries += 1;
+            }
+        }
+        std::cout << endl;
+    }
+    return number_countries;
+}
+
+void test_country_count()
+{
+    vector< vector<int> > matrix = { {5, 4, 4},{4, 3, 4},{3, 2, 4},{2, 2, 2},{3, 3, 4},{1, 4, 4},{4, 1, 1} };       // 11 countries
+    int result = algorithms::country_count(matrix);
+    std::cout << "expected [11], got [" << result << "]" << std::endl;
+}
+
 int main()
 {   
-    test_exterior_nodes();
+    std::string S = "ACCAABBC";
+    std::cout << algorithms::reduce_string(S) << std::endl;
+
+    std::string s;
+
+
+    vector<int> v(10);
+
 }

@@ -7,6 +7,9 @@
 #include <queue>
 #include <cassert>
 
+#define LEFT_TURN 0
+#define RIGHT_TURN 1
+
 template <class T>
 class BinaryTree
 {
@@ -15,8 +18,6 @@ class BinaryTree
 	BinaryTree* right_child;
 
 public:
-
-	
 
 	BinaryTree(T root_value, BinaryTree* left_child = nullptr, BinaryTree* right_child = nullptr) : value(new T(root_value)), left_child(left_child), right_child(right_child)
 	{}
@@ -41,7 +42,9 @@ public:
 	bool has_left_child(void) const;
 	bool has_right_child(void) const;
 
-	std::list<T> bfs_iteration(void) const;
+	std::list<T> bfs_iteration(void) const;		// https://app.codility.com/programmers/trainings/7/tree_longest_zig_zag/
+
+	size_t zig_zag_counter(void) const;
 
 private:
 	BinaryTree() : value(nullptr), left_child(nullptr), right_child(nullptr)
@@ -50,6 +53,7 @@ private:
 	void most_left_branch(std::list<T> & result) const;
 	void most_right_branch(std::list<T>& result, typename std::list<T>::iterator pos_to_insert_elems) const;
 	void internal_leafs_rec(const BinaryTree<T>* iteration_node, std::list<T>& leafs) const;			// get all leafs (left to right) except the one on the most left and most right
+	size_t zig_zag_counter_aux(int last_turn) const;
 
 	static BinaryTree<T>* process_tree(std::list<T>& elems, const T& NOT_VALUE_ID);
 	static BinaryTree<T>* process_level(std::list<T>& elems, BinaryTree<T>* tree, const T& NOT_VALUE_ID);
@@ -308,6 +312,41 @@ void BinaryTree<T>::process_right_child(std::list<T>& elems, BinaryTree<T>* pare
 	{
 		elems.pop_front();				// remove NOT_VALUE_ID to move to the next node in a superior level
 	}
+}
+
+template <class T>
+size_t BinaryTree<T>::zig_zag_counter(void) const
+{
+	if (this->is_empty() || (!this->has_left_child() && !this->has_right_child()))
+	{
+		return 0;
+	}
+	else
+	{
+		return std::max(this->left_child->zig_zag_counter_aux(LEFT_TURN), this->right_child->zig_zag_counter_aux(RIGHT_TURN));
+	}
+}
+
+template <class T>
+size_t BinaryTree<T>::zig_zag_counter_aux(int last_turn) const
+{
+	if (this->is_empty() || this->is_leaf())
+	{
+		return 0;
+	}
+	else
+	{
+		if (last_turn == RIGHT_TURN && this->has_left_child())
+		{
+			turn_left = 1 + this->zig_zag_counter_aux(LEFT_TURN);
+			keep_right = this->has_right_child() ? this->right_child->zig_zag_counter_aux(last_turn) : 0;
+		}
+		else if (last_turn == LEFT_TURN && this->has_right_child())
+		{
+
+		}
+	}
+
 }
 
 #endif // !__TREE_HPP__

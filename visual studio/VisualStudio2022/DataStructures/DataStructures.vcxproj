@@ -131,15 +131,19 @@
   <ItemGroup>
     <ClCompile Include="..\Multithreading\multithreading.cpp" />
     <ClCompile Include="algorithms.cpp" />
+    <ClCompile Include="big_file.cpp" />
     <ClCompile Include="bitwise.cpp" />
     <ClCompile Include="complete_tree.hpp" />
     <ClCompile Include="double_linked_list.hpp" />
+    <ClCompile Include="geometry.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stack.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms.h" />
+    <ClInclude Include="big_file.h" />
     <ClInclude Include="bitwise.h" />
+    <ClInclude Include="geometry.h" />
     <ClInclude Include="heap.hpp" />
     <ClInclude Include="multithreading.h" />
     <ClInclude Include="queue_by_stacks.hpp" />
